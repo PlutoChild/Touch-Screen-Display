@@ -1,0 +1,116 @@
+
+#include <TouchScreenMenu.h>
+#include <TouchScreen.h>
+#include <TFT.h>
+#include <cstddef.h>
+
+TouchScreenForm form1 = TouchScreenForm("Decadence", 2);
+
+TouchScreenForm form2 = TouchScreenForm("Decadence", 2);
+
+TouchScreenForm form3 = TouchScreenForm("Decadence", 2);
+
+TouchScreenLabel labels[] = {
+  TouchScreenLabel("@DecadenceLover", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 60, 2, 2, true),
+  TouchScreenLabel("Decadence sweet", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 80, 2, 2, true),
+  TouchScreenLabel("and savory are", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 100, 2, 2, true),
+  TouchScreenLabel("the best thing", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 120, 2, 2, true),
+  TouchScreenLabel("since sliced", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 140, 2, 2, true),
+  TouchScreenLabel("bread #inlove", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 160, 2, 2, true),
+  TouchScreenLabel("#whitebox", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 180, 2, 2, true),
+  TouchScreenLabel("#blackbox", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 200, 2, 2, true),
+  TouchScreenLabel("#foodporn", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 220, 2, 2, true),
+  TouchScreenLabel("ENDOFFORM")
+};
+
+TouchScreenButton buttons[] = {
+  TouchScreenButton(">>>", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 50, TSC.getScreenHeight() - 50, 2, 10),
+  TouchScreenButton("ENDOFFORM")
+};
+
+TouchScreenLabel labels2[] = {
+  TouchScreenLabel("@PlutoNogirl", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 60, 2, 2, true),
+  TouchScreenLabel("Decadence ", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 80, 2, 2, true),
+  TouchScreenLabel("savory", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 100, 2, 2, true),
+  TouchScreenLabel("blew away my", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 120, 2, 2, true),
+  TouchScreenLabel("Valentine!", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 140, 2, 2, true),
+  TouchScreenLabel("Best Dinner", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 160, 2, 2, true),
+  TouchScreenLabel("Ever! #whitebox", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 180, 2, 2, true),
+  TouchScreenLabel("#foodgasm", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 200, 2, 2, true),
+  TouchScreenLabel("ENDOFFORM")
+};
+
+TouchScreenButton buttons2[] = {
+  TouchScreenButton(">>>", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 50, TSC.getScreenHeight() - 50, 2, 10),
+  TouchScreenButton("ENDOFFORM")
+};
+
+TouchScreenLabel labels3[] = {
+  TouchScreenLabel("@ekarweta", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 60, 2, 2, true),
+  TouchScreenLabel("Decadence ", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 80, 2, 2, true),
+  TouchScreenLabel("Cheesecake", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 100, 2, 2, true),
+  TouchScreenLabel("is amazing!", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 120, 2, 2, true),
+  TouchScreenLabel("#blackbox", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 140, 2, 2, true),
+  TouchScreenLabel("#foodgasm", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 0, 160, 2, 2, true),
+  TouchScreenLabel("ENDOFFORM")
+};
+
+TouchScreenButton buttons3[] = {
+  TouchScreenButton(">>>>", TSC.createColor(255, 255, 255), TSC.createColor(0, 0, 0), 50, TSC.getScreenHeight() - 50, 2, 10),
+  TouchScreenButton("ENDOFFORM")
+};
+
+// keep track of which form is the currently active one
+TouchScreenForm *curForm = &form1;
+
+void setup(void) {
+  Serial.begin(57000);
+  
+  form1.setLabels(labels);
+  form1.setButtons(buttons);
+  form2.setLabels(labels2);
+  form2.setButtons(buttons2);
+  form3.setLabels(labels3);
+  form3.setButtons(buttons3);
+
+
+  TSC.setBackColor(TSC.createColor(0, 0, 0)); // change the default background color
+  TSC.init(); // make sure everything get initialized
+  curForm->draw(); // put up the current form
+}
+
+void loop(void) {
+  // handle the current form
+  if(curForm!=NULL){
+    // process the current menu
+    TouchScreenArea *item = curForm->process(false);
+    if(item!=NULL){
+      if(curForm == &form1){
+        // move to next form?
+        if(!strcmp(item->getText(),">>>")){
+          curForm = &form2;
+          TSC.clearScreen();
+          curForm->draw();
+        }
+      }
+      else if(curForm == &form2){
+        // move to next form?
+        if(!strcmp(item->getText(),">>>")){
+          curForm = &form3;
+          TSC.clearScreen();
+          curForm->draw();
+        }
+      }
+      
+      else if(curForm == &form3){
+        // move back to the first form?
+        if(!strcmp(item->getText(),">>>>")){
+          curForm = &form1;
+          TSC.clearScreen();
+          curForm->draw();
+        }
+       
+      }
+    }
+  }
+}
